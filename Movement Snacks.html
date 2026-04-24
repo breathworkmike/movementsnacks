@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movement Snacks · BreathworkMike</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#eef3eb;
+  --card:#e3ece0;
+  --border:rgba(40,72,38,0.13);
+  --text:#1b2c19;
+  --muted:rgba(27,44,25,0.52);
+  --soft:rgba(27,44,25,0.07);
+  --teal:#4e8c65;
+  --teal-dim:rgba(78,140,101,0.15);
+  --amber:#2a6640;
+  --teal-rgb:78,140,101;
+  --amber-rgb:42,102,64;
+  --border-rgb:40,72,38;
+  --text-rgb:27,44,25;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes drift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(40px,30px) scale(1.1);}}
+
+html{height:-webkit-fill-available;overflow-x:hidden;}
+body{
+  font-family:'Poppins',sans-serif;font-weight:300;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;min-height:-webkit-fill-available;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;overflow-x:hidden;
+}
+
+/* MESH BACKGROUND */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.mesh-blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.18;animation:drift 18s ease-in-out infinite alternate;}
+.mesh-blob:nth-child(1){width:500px;height:500px;background:radial-gradient(circle,rgba(var(--teal-rgb),0.9),transparent 70%);top:-100px;left:-100px;animation-duration:22s;}
+.mesh-blob:nth-child(2){width:400px;height:400px;background:radial-gradient(circle,rgba(var(--amber-rgb),0.9),transparent 70%);bottom:-80px;right:-80px;animation-duration:17s;animation-delay:-5s;}
+
+.app{position:relative;z-index:1;max-width:540px;margin:0 auto;padding:1.5rem 1.25rem 3rem;}
+
+/* HEADER */
+.site-header{text-align:center;margin-bottom:1.5rem;animation:fadeUp 0.8s ease both;}
+.site-title{font-family:'Poppins',sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);font-weight:800;letter-spacing:-0.04em;line-height:1.1;
+  background:linear-gradient(135deg,var(--text) 40%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.site-byline-brand{font-size:0.85rem;font-weight:400;letter-spacing:0.06em;color:var(--muted);margin-top:0.45rem;}
+.brand-name{font-family:'Poppins',sans-serif;font-size:0.95rem;font-weight:400;letter-spacing:-0.02em;
+  background:linear-gradient(135deg,var(--text) 40%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.brand-name strong{font-weight:800;}
+
+/* PHASE DOTS */
+.phase-dots{display:flex;gap:5px;margin-bottom:1.25rem;}
+.phase-dot{flex:1;height:2px;border-radius:2px;background:var(--soft);}
+.phase-dot.active{background:var(--teal);}
+.phase-dot.done{background:rgba(var(--teal-rgb),0.4);}
+
+/* TABS */
+.tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:3px;gap:2px;margin-bottom:1.25rem;}
+.tab{flex:1;padding:0.5rem 0.5rem;text-align:center;font-size:0.6rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;color:var(--muted);background:transparent;border:none;font-family:'Poppins',sans-serif;border-radius:100px;transition:all 0.22s ease;}
+.tab.active{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(var(--teal-rgb),0.4);}
+
+/* SECTION LABELS */
+.sec-label{font-size:0.52rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:0.7rem 1.2rem;border-radius:100px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);font-size:0.65rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.22s ease;font-family:'Poppins',sans-serif;}
+.btn:hover{background:var(--soft);}
+.btn:active{transform:scale(.97);}
+.btn-green{
+  background:linear-gradient(135deg,rgba(var(--teal-rgb),0.88),rgba(var(--teal-rgb),0.68));
+  border-color:rgba(var(--teal-rgb),0.9);color:#fff;font-weight:700;
+  box-shadow:0 4px 22px rgba(var(--teal-rgb),0.28);}
+.btn-green:hover{background:linear-gradient(135deg,rgba(var(--teal-rgb),1),rgba(var(--teal-rgb),0.82));box-shadow:0 6px 36px rgba(var(--teal-rgb),0.38);transform:translateY(-1px);}
+.btn-green:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-red{border-color:rgba(var(--teal-rgb),0.2);color:var(--muted);}
+.btn-red:hover{border-color:rgba(var(--teal-rgb),0.4);color:var(--teal);}
+.btn-sm{padding:0.42rem 0.9rem;font-size:0.58rem;}
+.btn-full{width:100%;margin-top:8px;}
+.btn-row{display:flex;gap:8px;margin-top:8px;}
+
+/* MOVEMENT GRID */
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;margin-bottom:1rem;}
+.tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;
+  cursor:pointer;transition:all 0.22s ease;user-select:none;position:relative;text-align:center;}
+.tile:hover{border-color:rgba(var(--teal-rgb),0.35);background:rgba(var(--teal-rgb),0.06);}
+.tile.sel{border-color:rgba(var(--teal-rgb),0.55);background:var(--teal-dim);box-shadow:0 2px 14px rgba(var(--teal-rgb),0.1);}
+.tile .badge{position:absolute;top:6px;right:8px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;border-radius:20px;padding:1px 6px;}
+.tile .icon{font-size:20px;margin-bottom:5px;}
+.tile .name{font-size:0.65rem;font-weight:600;color:var(--text);line-height:1.3;letter-spacing:0.04em;}
+.tile .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:11px;font-weight:400;padding:7px 11px;border-radius:8px;white-space:normal;width:200px;text-align:left;pointer-events:none;opacity:0;transition:opacity .15s;z-index:20;line-height:1.5;}
+.tile .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
+.tile:hover .tip{opacity:1;}
+
+/* DURATION BUTTONS */
+.dur-btn{flex:1;min-width:48px;padding:0.42rem 6px;border-radius:100px;border:1px solid var(--border);
+  background:var(--card);color:var(--muted);font-size:0.6rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.22s ease;font-family:'Poppins',sans-serif;}
+.dur-btn:hover{background:var(--teal-dim);border-color:rgba(var(--teal-rgb),0.35);color:var(--teal);}
+.dur-btn.active{background:var(--teal-dim);border-color:rgba(var(--teal-rgb),0.55);color:var(--teal);box-shadow:0 2px 12px rgba(var(--teal-rgb),0.1);}
+
+/* QUEUE */
+.rand-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.rand-panel label{font-size:0.6rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.rand-panel input[type=range]{flex:1;min-width:80px;accent-color:var(--teal);}
+.rand-lbl{font-size:0.75rem;font-weight:600;color:var(--teal);min-width:20px;text-align:center;}
+.q-row{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:5px;}
+.q-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
+.q-name{flex:1;font-size:0.7rem;font-weight:500;color:var(--text);}
+.q-dur{font-size:0.58rem;font-weight:500;color:var(--muted);margin-right:4px;letter-spacing:0.08em;text-transform:uppercase;}
+.q-rm{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px;line-height:1;font-family:inherit;}
+.q-rm:hover{color:var(--teal);}
+.empty-q{text-align:center;padding:1.25rem;color:var(--muted);font-size:0.65rem;letter-spacing:0.08em;border:1px dashed var(--border);border-radius:10px;margin-bottom:1rem;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;}
+.sess-icon{font-size:44px;margin-bottom:10px;}
+.sess-name{font-size:1.2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px;}
+.sess-sub{font-size:0.6rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.ring-wrap{position:relative;width:140px;height:140px;margin:0 auto 12px;}
+.ring-wrap svg{position:absolute;top:0;left:0;}
+.ring-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;font-weight:700;color:var(--text);}
+.prog{height:2px;background:var(--soft);border-radius:2px;margin:12px 0;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--amber));border-radius:2px;transition:width 1s linear;}
+.next-hint{font-size:0.58rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+
+/* BREATHWORK SETUP */
+.breath-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;}
+.bopt{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;transition:all 0.22s ease;}
+.bopt:hover{border-color:rgba(var(--teal-rgb),0.3);}
+.bopt.sel{border-color:rgba(var(--teal-rgb),0.55);background:var(--teal-dim);box-shadow:0 2px 12px rgba(var(--teal-rgb),0.1);}
+.bopt-title{font-size:0.68rem;font-weight:700;letter-spacing:0.04em;color:var(--text);}
+.bopt-desc{font-size:0.56rem;font-weight:400;color:var(--muted);margin-top:3px;letter-spacing:0.04em;}
+.editor{background:var(--soft);border-radius:12px;padding:14px;margin-bottom:1rem;}
+.editor-title{font-size:0.52rem;font-weight:600;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;}
+.dial-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dial{background:var(--card);border-radius:10px;padding:12px 10px;text-align:center;border:1px solid var(--border);}
+.dial-lbl{font-size:0.52rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;}
+.dial-lbl.dim{color:rgba(var(--text-rgb),0.2);}
+.dial-ctrl{display:flex;align-items:center;justify-content:center;gap:10px;}
+.db{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:17px;line-height:1;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;transition:all 0.15s;padding:0;color:var(--text);}
+.db:hover{background:var(--teal-dim);border-color:rgba(var(--teal-rgb),0.4);color:var(--teal);}
+.db:disabled{opacity:0.25;cursor:not-allowed;}
+.dv{font-size:1.4rem;font-weight:700;min-width:28px;color:var(--teal);}
+.dv.dim{color:rgba(var(--text-rgb),0.2);}
+.dsec{font-size:0.48rem;font-weight:500;color:var(--muted);margin-top:3px;letter-spacing:0.08em;text-transform:uppercase;}
+.dtog{font-size:0.55rem;color:var(--teal);cursor:pointer;margin-top:6px;text-decoration:underline;display:block;letter-spacing:0.06em;}
+.pat-summary{font-size:0.58rem;color:var(--muted);margin-top:10px;text-align:center;letter-spacing:0.06em;}
+.dur-row{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:8px;padding:10px 14px;margin-bottom:1rem;}
+.dur-row label{font-size:0.58rem;font-weight:600;color:var(--muted);white-space:nowrap;letter-spacing:0.1em;text-transform:uppercase;}
+.dur-row input[type=range]{flex:1;accent-color:var(--teal);}
+.dur-val{font-size:0.75rem;font-weight:700;min-width:44px;text-align:right;color:var(--teal);}
+
+/* BREATH STATS */
+.breath-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.bstat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center;}
+.bstat-val{font-size:1.4rem;font-weight:700;color:var(--teal);margin-bottom:3px;}
+.bstat-lbl{font-size:0.5rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;line-height:1.4;}
+
+/* BREATHING CIRCLE */
+.bc-wrap{display:flex;flex-direction:column;align-items:center;padding:.75rem 0;}
+.bc{width:130px;height:130px;border-radius:50%;border:1.5px solid rgba(var(--teal-rgb),0.4);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 40px rgba(var(--teal-rgb),0.08);}
+.bc-num{font-size:2rem;font-weight:700;color:var(--text);}
+.bc-phase{font-size:0.58rem;font-weight:600;color:var(--teal);letter-spacing:0.2em;text-transform:uppercase;margin-top:3px;}
+.bc-remain{font-size:0.62rem;font-weight:500;color:var(--muted);margin-top:10px;letter-spacing:0.1em;text-transform:uppercase;}
+
+/* MANTRA */
+.mantra-q{font-size:1.1rem;font-weight:700;line-height:1.4;margin-bottom:8px;letter-spacing:-0.02em;}
+textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:0.8rem;font-family:'Poppins',sans-serif;font-weight:300;color:var(--text);background:var(--bg);resize:none;outline:none;line-height:1.6;}
+textarea:focus{border-color:rgba(var(--teal-rgb),0.4);}
+input[type=text]{display:block;width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:0.8rem;font-family:'Poppins',sans-serif;font-weight:300;color:var(--text);background:var(--bg);outline:none;margin-bottom:8px;transition:border-color 0.2s;}
+input[type=text]:focus{border-color:rgba(var(--teal-rgb),0.4);}
+.tips-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:0.6rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;font-family:'Poppins',sans-serif;margin-top:14px;transition:all 0.22s;}
+.tips-btn:hover{border-color:rgba(var(--teal-rgb),0.3);color:var(--teal);}
+.tips-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:14px 16px;}
+.tips-body li{padding:8px 0;border-bottom:1px solid var(--soft);font-size:0.68rem;color:var(--text);line-height:1.6;list-style:none;font-weight:300;}
+.tips-body li:last-child{border-bottom:none;}
+.tips-body li strong{font-weight:600;}
+.tips-footer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:0.65rem;color:var(--muted);line-height:1.7;}
+
+/* FOOTER */
+.page-footer{margin-top:2.5rem;padding:1.5rem 0 1rem;border-top:1px solid var(--border);text-align:center;}
+.page-footer .support-text{font-size:0.68rem;color:var(--muted);line-height:1.8;margin-bottom:1.25rem;}
+.page-footer .support-text a{color:var(--amber);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(var(--amber-rgb),0.35);}
+.page-footer .social-row{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.page-footer .ig-link{display:inline-flex;align-items:center;gap:9px;text-decoration:none;}
+.page-footer .ig-name{font-size:0.8rem;font-weight:700;color:var(--text);letter-spacing:-0.01em;}
+.page-footer .email-link{font-size:0.68rem;font-weight:600;color:var(--text);text-decoration:none;letter-spacing:0.04em;}
+.page-footer .email-link:hover{color:var(--teal);}
+
+
+/* THEME TOGGLE */
+.theme-toggle{position:fixed;top:14px;right:14px;z-index:100;
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+  background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:16px;transition:all 0.22s ease;box-shadow:0 2px 12px rgba(var(--border-rgb),0.08);}
+.theme-toggle:hover{border-color:rgba(var(--teal-rgb),0.4);transform:scale(1.08);}
+
+/* PINK THEME */
+body.theme-pink{
+  --bg:#f5eef4;
+  --card:#ede0ec;
+  --border:rgba(120,40,120,0.13);
+  --text:#2c1a2e;
+  --muted:rgba(60,20,65,0.52);
+  --soft:rgba(60,20,65,0.07);
+  --teal:#9b4dab;
+  --teal-dim:rgba(155,77,171,0.15);
+  --amber:#6d2a7a;
+  --teal-rgb:155,77,171;
+  --amber-rgb:109,42,122;
+  --border-rgb:120,40,120;
+  --text-rgb:44,26,46;
+}
+body.theme-pink .mesh-blob:nth-child(1){background:radial-gradient(circle,rgba(155,77,171,0.9),transparent 70%);}
+body.theme-pink .mesh-blob:nth-child(2){background:radial-gradient(circle,rgba(109,42,122,0.9),transparent 70%);}
+
+
+/* ── SITE FOOTER ── matches iheh style */
+.site-footer{
+  margin-top:2.5rem;padding:2rem 0 2.5rem;
+  border-top:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;gap:0.9rem;
+  text-align:center;
+}
+.footer-badge{margin-bottom:0.2rem;}
+.footer-brand{
+  font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:400;
+  letter-spacing:-0.03em;text-decoration:none;
+  background:linear-gradient(135deg,var(--text) 40%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.footer-brand strong{font-weight:800;}
+.footer-support{
+  font-family:'Poppins',sans-serif;font-size:0.72rem;font-weight:300;
+  color:var(--muted);line-height:1.7;max-width:300px;
+}
+.footer-support a{
+  color:var(--amber);text-decoration:none;font-weight:500;
+  border-bottom:1px solid rgba(var(--amber-rgb),0.35);
+  transition:border-color 0.2s;padding-bottom:1px;
+}
+.footer-support a:hover{border-color:rgba(var(--amber-rgb),0.7);}
+.footer-insta{
+  display:inline-flex;align-items:center;gap:7px;
+  text-decoration:none;color:var(--text);
+  font-size:0.72rem;font-weight:700;letter-spacing:0.08em;
+  transition:opacity 0.2s;
+}
+.footer-insta:hover{opacity:0.65;}
+.footer-insta svg{width:18px;height:18px;flex-shrink:0;}
+.footer-email{
+  font-family:'Poppins',sans-serif;font-size:0.68rem;font-weight:400;
+  color:var(--muted);text-decoration:none;letter-spacing:0.04em;
+  transition:opacity 0.2s;
+}
+.footer-email:hover{opacity:0.65;}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="mesh"><div class="mesh-blob"></div><div class="mesh-blob"></div></div>
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Switch colour theme">🌿</button>
+<div class="app">
+
+<!-- LOGO -->
+<div class="site-header">
+  <div class="site-title"><strong>Movement Snacks</strong></div>
+  <div class="site-byline-brand">by <span class="brand-name">Breathwork<strong>Mike</strong></span></div>
+</div>
+<div class="phase-dots">
+  <div class="phase-dot active" id="dot0"></div>
+  <div class="phase-dot" id="dot1"></div>
+  <div class="phase-dot" id="dot2"></div>
+  <div class="phase-dot" id="dot3"></div>
+</div>
+
+<!-- SETUP -->
+<div id="s-setup">
+  <div class="tabs">
+    <button class="tab active" id="tab-m" onclick="switchTab('m')">Movement</button>
+    <button class="tab" id="tab-b" onclick="switchTab('b')">Breathwork</button>
+  </div>
+
+  <!-- MOVEMENT -->
+  <div id="tc-m">
+    <div class="top-bar">
+      <div class="sec-label" style="margin:0">Choose your movements</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-sm" onclick="toggleRand()">🎲 Randomise</button>
+        <button class="btn btn-sm btn-red" onclick="clearAll()">Clear</button>
+      </div>
+    </div>
+    <div class="rand-panel hidden" id="rand-panel">
+      <label>How many?</label>
+      <input type="range" min="1" max="15" value="5" step="1" id="rand-sl" oninput="updRandLbl()">
+      <span class="rand-lbl" id="rand-lbl">5</span>
+      <button class="btn btn-sm btn-green" onclick="doRand()">Go</button>
+    </div>
+    <div class="grid" id="move-grid"></div>
+    <div style="margin-bottom:1rem">
+      <div class="sec-label" style="margin-bottom:8px">Duration each</div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="dur-btn" id="db-30" onclick="setDur(30,this)">30s</button>
+        <button class="dur-btn" id="db-45" onclick="setDur(45,this)">45s</button>
+        <button class="dur-btn" id="db-60" onclick="setDur(60,this)">60s</button>
+        <button class="dur-btn active" id="db-90" onclick="setDur(90,this)">90s</button>
+        <button class="dur-btn" id="db-120" onclick="setDur(120,this)">2 min</button>
+      </div>
+    </div>
+    <div class="sec-label">Your queue</div>
+    <div id="q-list"></div>
+    <button class="btn btn-green btn-full" id="start-btn" onclick="startSess()" disabled>Start session</button>
+    <div style="text-align:center;margin-top:10px"><span style="font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline" onclick="goBreath()">skip to breathwork</span></div>
+  </div>
+
+  <!-- BREATHWORK SETUP -->
+  <div id="tc-b" class="hidden">
+    <div class="sec-label">Choose a preset</div>
+    <div class="breath-opts">
+      <div class="bopt sel" id="bopt0" onclick="selB(0)"><div class="bopt-title">Box breathing</div><div class="bopt-desc">5s in · 5s hold · 5s out · 5s hold</div></div>
+      <div class="bopt" id="bopt1" onclick="selB(1)"><div class="bopt-title">Coherence</div><div class="bopt-desc">6s in · 6s out</div></div>
+      <div class="bopt" id="bopt2" onclick="selB(2)"><div class="bopt-title">4-7-8</div><div class="bopt-desc">4s in · 7s hold · 8s out</div></div>
+      <div class="bopt" id="bopt3" onclick="selB(3)"><div class="bopt-title">Energising</div><div class="bopt-desc">2s in · 1s hold · 2s out</div></div>
+    </div>
+    <div class="editor">
+      <div class="editor-title">Customise timing</div>
+      <div class="dial-grid">
+        <div class="dial">
+          <div class="dial-lbl" id="lbl-in">Inhale</div>
+          <div class="dial-ctrl">
+            <button class="db" onclick="adj('in',-1)">−</button>
+            <div class="dv" id="dv-in">5</div>
+            <button class="db" onclick="adj('in',1)">+</button>
+          </div>
+          <div class="dsec">seconds</div>
+        </div>
+        <div class="dial">
+          <div class="dial-lbl" id="lbl-h1">Hold in</div>
+          <div class="dial-ctrl">
+            <button class="db" id="dbm-h1" onclick="adj('h1',-1)">−</button>
+            <div class="dv" id="dv-h1">5</div>
+            <button class="db" id="dbp-h1" onclick="adj('h1',1)">+</button>
+          </div>
+          <div class="dsec">seconds</div>
+          <span class="dtog" id="tog-h1" onclick="togPhase('h1')">disable</span>
+        </div>
+        <div class="dial">
+          <div class="dial-lbl" id="lbl-ex">Exhale</div>
+          <div class="dial-ctrl">
+            <button class="db" onclick="adj('ex',-1)">−</button>
+            <div class="dv" id="dv-ex">5</div>
+            <button class="db" onclick="adj('ex',1)">+</button>
+          </div>
+          <div class="dsec">seconds</div>
+        </div>
+        <div class="dial">
+          <div class="dial-lbl" id="lbl-h2">Hold out</div>
+          <div class="dial-ctrl">
+            <button class="db" id="dbm-h2" onclick="adj('h2',-1)">−</button>
+            <div class="dv" id="dv-h2">5</div>
+            <button class="db" id="dbp-h2" onclick="adj('h2',1)">+</button>
+          </div>
+          <div class="dsec">seconds</div>
+          <span class="dtog" id="tog-h2" onclick="togPhase('h2')">disable</span>
+        </div>
+      </div>
+      <div class="pat-summary" id="pat-sum">Pattern: 5s in · 5s hold · 5s out · 5s hold</div>
+    </div>
+    <div class="breath-stats">
+      <div class="bstat"><div class="bstat-val" id="bpm-setup">3.0</div><div class="bstat-lbl">Breaths per minute</div></div>
+      <div class="bstat"><div class="bstat-val" id="red-setup">82%</div><div class="bstat-lbl">Reduction vs normal breathing</div></div>
+    </div>
+    <div class="dur-row" style="margin-top:12px">
+      <label>Session length</label>
+      <input type="range" min="1" max="10" value="5" step="1" id="bdur-sl" oninput="updBDur()">
+      <span class="dur-val" id="bdur-lbl">5 min</span>
+    </div>
+    <button class="btn btn-green btn-full" onclick="goBreath()">Start breathwork</button>
+  </div>
+</div>
+
+<!-- MOVEMENT SESSION -->
+<div id="s-sess" class="hidden">
+  <div class="sec-label" id="sp-lbl">Movement 1 of 5</div>
+  <div class="card">
+    <div class="sess-icon" id="si">🌀</div>
+    <div class="sess-name" id="sn">Hip circles</div>
+    <div class="sess-sub" id="sd">90 seconds</div>
+    <div id="sess-tip" style="font-size:13px;color:var(--text);line-height:1.6;background:var(--soft);border-radius:8px;padding:10px 12px;margin:0 0 12px;text-align:left;font-size:0.72rem;color:var(--text);line-height:1.6"></div>
+    <div class="ring-wrap">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="60" stroke="rgba(40,72,38,0.1)" stroke-width="6" fill="none"/>
+        <circle cx="70" cy="70" r="60" stroke="rgba(78,140,101,0.8)" stroke-width="6" fill="none"
+          stroke-dasharray="376.99" stroke-dashoffset="376.99" id="s-ring"
+          style="transform:rotate(-90deg);transform-origin:70px 70px;transition:stroke-dashoffset 1s linear"/>
+      </svg>
+      <div class="ring-num" id="s-cd">90</div>
+      <div style="position:absolute;top:calc(50% + 22px);left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.05em;text-transform:uppercase">seconds</div>
+    </div>
+    <div class="prog"><div class="prog-fill" id="s-prog" style="width:0%"></div></div>
+    <div class="btn-row">
+      <button class="btn" style="flex:1" id="pause-btn" onclick="togPause()">Pause</button>
+      <button class="btn" style="flex:1" onclick="skipMov()">Skip</button>
+    </div>
+    <div class="next-hint" id="s-next"></div>
+  </div>
+</div>
+
+<!-- BREATH SESSION -->
+<div id="s-breath" class="hidden">
+  <div class="sec-label">Breathwork</div>
+
+  <!-- COLLAPSIBLE SETTINGS -->
+  <div style="margin-bottom:10px">
+    <button class="btn btn-sm" id="breath-settings-toggle" onclick="togBreathSettings()" style="width:100%;justify-content:space-between">
+      <span>Edit pattern &amp; duration</span><span id="breath-settings-arrow" style="font-size:10px;transition:transform .2s;transform:rotate(180deg)">▼</span>
+    </button>
+    <div id="breath-settings-panel" style="background:var(--soft);border:1px solid var(--border);border-radius:0 0 10px 10px;padding:14px;margin-top:-1px">
+      <div class="sec-label" style="margin-bottom:8px">Preset</div>
+      <div class="breath-opts" style="margin-bottom:12px">
+        <div class="bopt sel" id="bopt2-0" onclick="selB2(0)"><div class="bopt-title">Box breathing</div><div class="bopt-desc">5s in · 5s hold · 5s out · 5s hold</div></div>
+        <div class="bopt" id="bopt2-1" onclick="selB2(1)"><div class="bopt-title">Coherence</div><div class="bopt-desc">6s in · 6s out</div></div>
+        <div class="bopt" id="bopt2-2" onclick="selB2(2)"><div class="bopt-title">4-7-8</div><div class="bopt-desc">4s in · 7s hold · 8s out</div></div>
+        <div class="bopt" id="bopt2-3" onclick="selB2(3)"><div class="bopt-title">Energising</div><div class="bopt-desc">2s in · 1s hold · 2s out</div></div>
+      </div>
+      <div class="editor">
+        <div class="editor-title">Timing</div>
+        <div class="dial-grid">
+          <div class="dial">
+            <div class="dial-lbl">Inhale</div>
+            <div class="dial-ctrl">
+              <button class="db" onclick="adj2('in',-1)">−</button>
+              <div class="dv" id="dv2-in">5</div>
+              <button class="db" onclick="adj2('in',1)">+</button>
+            </div>
+            <div class="dsec">seconds</div>
+          </div>
+          <div class="dial">
+            <div class="dial-lbl" id="lbl2-h1">Hold in</div>
+            <div class="dial-ctrl">
+              <button class="db" id="db2m-h1" onclick="adj2('h1',-1)">−</button>
+              <div class="dv" id="dv2-h1">5</div>
+              <button class="db" id="db2p-h1" onclick="adj2('h1',1)">+</button>
+            </div>
+            <div class="dsec">seconds</div>
+            <span class="dtog" id="tog2-h1" onclick="togPhase2('h1')">disable</span>
+          </div>
+          <div class="dial">
+            <div class="dial-lbl">Exhale</div>
+            <div class="dial-ctrl">
+              <button class="db" onclick="adj2('ex',-1)">−</button>
+              <div class="dv" id="dv2-ex">5</div>
+              <button class="db" onclick="adj2('ex',1)">+</button>
+            </div>
+            <div class="dsec">seconds</div>
+          </div>
+          <div class="dial">
+            <div class="dial-lbl" id="lbl2-h2">Hold out</div>
+            <div class="dial-ctrl">
+              <button class="db" id="db2m-h2" onclick="adj2('h2',-1)">−</button>
+              <div class="dv" id="dv2-h2">5</div>
+              <button class="db" id="db2p-h2" onclick="adj2('h2',1)">+</button>
+            </div>
+            <div class="dsec">seconds</div>
+            <span class="dtog" id="tog2-h2" onclick="togPhase2('h2')">disable</span>
+          </div>
+        </div>
+        <div class="pat-summary" id="pat-sum2">Pattern: 5s in · 5s hold · 5s out · 5s hold</div>
+      </div>
+      <div class="breath-stats">
+        <div class="bstat"><div class="bstat-val" id="bpm-sess">3.0</div><div class="bstat-lbl">Breaths per minute</div></div>
+        <div class="bstat"><div class="bstat-val" id="red-sess">82%</div><div class="bstat-lbl">Reduction vs normal breathing</div></div>
+      </div>
+      <div class="dur-row" style="margin-bottom:0;margin-top:12px">
+        <label>Session length</label>
+        <input type="range" min="1" max="10" value="5" step="1" id="bdur2-sl" oninput="updBDur2()">
+        <span class="dur-val" id="bdur2-lbl">5 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="b-pre">
+      <div style="font-size:36px;margin-bottom:10px;color:var(--teal)">🫁</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:4px" id="b-name">Box breathing</div>
+      <div style="font-size:13px;color:#888;margin-bottom:20px" id="b-desc">5s in · 5s hold · 5s out · 5s hold</div>
+      <button class="btn btn-green btn-full" onclick="beginBreath()">Begin</button>
+    </div>
+    <div id="b-run" class="hidden">
+      <div class="bc-wrap">
+        <div class="bc" id="bc" style="transition:transform 6s ease-in-out,border-color .5s">
+          <div style="text-align:center">
+            <div class="bc-num" id="bc-n">5</div>
+            <div class="bc-phase" id="bc-p">inhale</div>
+          </div>
+        </div>
+        <div class="bc-remain" id="bc-r">5:00 remaining</div>
+        <div id="breath-mantra-wrap" style="margin-top:14px;padding:10px 14px;background:var(--soft);border-radius:8px;border-left:3px solid #a8c8b4">
+          <div id="breath-mantra-text" style="font-size:13px;font-style:italic;color:var(--text);line-height:1.6"></div>
+          <button onclick="newBreathMantra()" style="background:none;border:none;cursor:pointer;font-size:22px;padding:4px;margin-top:6px" title="New mantra">🌱</button>
+        </div>
+      </div>
+      <div class="breath-stats" style="margin-bottom:10px">
+        <div class="bstat"><div class="bstat-val" id="bpm-live">3.0</div><div class="bstat-lbl">Breaths per minute</div></div>
+        <div class="bstat"><div class="bstat-val" id="red-live">82%</div><div class="bstat-lbl">Reduction vs normal breathing</div></div>
+      </div>
+      <div class="prog"><div class="prog-fill" id="bc-prog" style="width:0%"></div></div>
+      <div class="btn-row">
+        <button class="btn" style="flex:1" id="bpause-btn" onclick="togBreath()">Pause</button>
+        <button class="btn" style="flex:1" onclick="endBreath()">Finish</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANTRA -->
+<div id="s-mantra" class="hidden">
+  <div class="sec-label">Daily reflection</div>
+
+  <!-- MANTRA CARD -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:0.52rem;font-weight:600;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Today's mantra</div>
+    <div id="mantra-text" style="font-size:17px;font-weight:600;color:var(--text);line-height:1.5;font-style:italic;margin-bottom:12px">"I am open to the possibilities this day holds."</div>
+    <button onclick="newMantra()" style="background:none;border:none;cursor:pointer;font-size:24px;padding:4px" title="New mantra">🌱</button>
+  </div>
+
+  <!-- TAROT CARD -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:0.52rem;font-weight:600;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Tarot draw</div>
+    <div id="tarot-idle">
+      <div style="font-size:32px;margin-bottom:8px">🂠</div>
+      <div style="font-size:13px;color:#888;margin-bottom:14px">Draw a card for today's reflection</div>
+      <button class="btn btn-sm" onclick="drawTarot()">Draw a card</button>
+    </div>
+    <div id="tarot-result" class="hidden">
+      <div id="tarot-symbol" style="font-size:38px;margin-bottom:6px"></div>
+      <div id="tarot-name" style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px"></div>
+      <div id="tarot-arcana" style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;font-size:0.52rem;font-weight:600"></div>
+      <div id="tarot-meaning" style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:12px"></div>
+      <div id="tarot-question" style="font-size:13px;font-style:italic;color:#888;border-top:1px solid var(--border);padding-top:10px"></div>
+      <button class="btn btn-sm" onclick="drawTarot()" style="margin-top:12px">Draw again</button>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:18px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:6px">What would make today <em>amazing</em>?</div>
+    <div style="font-size:13px;color:var(--muted)">Take a breath. Let the answer come.</div>
+    <div style="padding-top:1.25rem;border-top:1px solid var(--border);margin-top:1.25rem">
+      <div style="display:flex;flex-direction:column;align-items:center;margin-top:1.25rem">
+        <button onclick="finish()" title="Complete today's practice" style="width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(var(--teal-rgb),0.9),rgba(var(--teal-rgb),0.55));border:none;cursor:pointer;font-size:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px rgba(var(--teal-rgb),0.1),0 0 0 16px rgba(var(--teal-rgb),0.05),0 8px 32px rgba(var(--teal-rgb),0.3);transition:transform .15s" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform=''">🌿</button>
+        <div style="font-size:12px;color:var(--muted);margin-top:10px;font-weight:500;letter-spacing:.03em">Complete today's practice</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIAL PROMPT -->
+  </div>
+
+<!-- DONE -->
+<div id="s-done" class="hidden" style="padding-bottom:2rem">
+  <div style="text-align:center;padding:2.5rem 0 1.5rem">
+    <div style="font-size:52px;margin-bottom:1rem">🌿</div>
+    <div style="font-size:1.3rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px">Practice complete</div>
+    <div style="font-size:14px;color:#888;margin-bottom:1.5rem">You've moved, breathed, and set your intention.<br>Have an amazing day.</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-green" onclick="location.reload()">Start a new session</button>
+    </div>
+  </div>
+
+  <!-- TONE INFO -->
+
+
+  <!-- FEEDBACK -->
+  </div>
+
+<!-- PERSISTENT FOOTER -->
+<div class="site-footer">
+  <div class="footer-badge">
+    <a href="https://instagram.com/breathworkmike" target="_blank" rel="noopener" class="footer-brand">
+      Breathwork<strong>Mike</strong>
+    </a>
+  </div>
+  <p class="footer-support">
+    If this helped you move or breathe easier, please consider
+    <a href="https://ko-fi.com/breathworkmike" target="_blank" rel="noopener">a tip via Ko-fi</a>
+    or <a href="https://paypal.me/mikeditchfield" target="_blank" rel="noopener">PayPal Me</a> ☕
+  </p>
+  <a class="footer-insta" href="https://instagram.com/breathworkmike" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+    </svg>
+    @breathworkmike
+  </a>
+  <a class="footer-email" href="mailto:breathworkmike@gmail.com">breathworkmike@gmail.com</a>
+</div>
+
+<script>
+const MOVES=[
+  {n:'Hip circles',         i:'🌀', tip:'Stand feet hip-width apart. Draw large slow circles with your hips — 10 each direction.'},
+  {n:'Shoulder rolls',      i:'💪', tip:'Roll both shoulders forward 5 times, then backward 5 times. Let them be slow and full.'},
+  {n:'Shaking & brushing',  i:'✨', tip:'Shake out hands, arms and legs vigorously, then brush down from head to toe.'},
+  {n:'Circulation awakening',i:'❤️',tip:'Lightly tap or pat down your arms, chest, belly and legs to wake up circulation.'},
+  {n:'Spinal twists',       i:'🔄', tip:'Stand tall. Gently rotate your upper body left and right, letting arms swing freely.'},
+  {n:'Neck rolls',          i:'⭕', tip:'Drop chin to chest, slowly roll ear to shoulder and around. 3 each direction.'},
+  {n:'Wrist & ankle circles',i:'🔁',tip:'Circle both wrists 5 times each way. Lift one foot and circle the ankle, then swap.'},
+  {n:'Knee circles',        i:'🦵', tip:'Feet together, hands on knees. Circle slowly 8 times each direction.'},
+  {n:'Forward fold',        i:'🙇', tip:'Hinge at hips, let head and arms hang heavy. Nod yes and no slowly to release neck.'},
+  {n:'Side stretches',      i:'🤸', tip:'Reach one arm up and over your head, stretching the whole side body. Hold 5 breaths, swap.'},
+  {n:'Chest opener',        i:'🦋', tip:'Clasp hands behind back, squeeze shoulder blades, lift chest and gaze gently upward.'},
+  {n:'Standing cat-cow',    i:'🐱', tip:'Hands on thighs. Arch spine on inhale (cow), round it on exhale (cat). Slow and smooth.'},
+  {n:'Gentle squats',       i:'⬇️', tip:'Feet hip-width, toes slightly out. Lower slowly for 3 counts, press up for 3. Stay fluid.'},
+  {n:'Calf raises',         i:'⬆️', tip:'Rise up onto toes, hold briefly, lower slowly. Use a wall for balance if needed.'},
+  {n:'Arm swings',          i:'🌊', tip:'Let arms swing freely across your chest and back, building to a gentle rhythm.'},
+];
+const DMAP=[30,45,60,90,120,150,180,240,300,360];
+const DLBL=['30s','45s','60s','90s','2 min','2.5 min','3 min','4 min','5 min','6 min'];
+const BPRE=[
+  {n:'Box breathing',  d:'5s in · 5s hold · 5s out · 5s hold', in:5,h1:5,h1on:true, ex:5,h2:5,h2on:true},
+  {n:'Coherence',      d:'6s in · 6s out',                      in:6,h1:5,h1on:false,ex:6,h2:5,h2on:false},
+  {n:'4-7-8',          d:'4s in · 7s hold · 8s out',            in:4,h1:7,h1on:true, ex:8,h2:5,h2on:false},
+  {n:'Energising',     d:'2s in · 1s hold · 2s out',            in:2,h1:1,h1on:true, ex:2,h2:5,h2on:false},
+];
+let sel=[],durI=3,bdurM=5,bpI=0;
+let randOpen=false,randN=5;
+let D={in:5,h1:5,h1on:true,ex:5,h2:5,h2on:true};
+let queue=[],sessI=0,stimer=null,sleft=0,spause=false;
+let apat=[],bint=null,bphI=0,bphL=0,belap=0,btotal=300,bpause=false;
+
+function buildGrid(){
+  const g=document.getElementById('move-grid');
+  MOVES.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.className='tile';d.id='t'+i;
+    d.innerHTML=`<div class="tip">${m.tip}</div><div class="icon">${m.i}</div><div class="name">${m.n}</div>`;
+    d.onclick=()=>tog(i);g.appendChild(d);
+  });
+}
+function tog(i){const p=sel.indexOf(i);p>=0?sel.splice(p,1):sel.push(i);rfGrid();rfQ();}
+function rfGrid(){
+  MOVES.forEach((_,i)=>{
+    const t=document.getElementById('t'+i),p=sel.indexOf(i);let b=t.querySelector('.badge');
+    if(p>=0){t.classList.add('sel');if(!b){b=document.createElement('div');b.className='badge';t.appendChild(b);}b.textContent=p+1;}
+    else{t.classList.remove('sel');if(b)b.remove();}
+  });
+}
+function rfQ(){
+  const ql=document.getElementById('q-list'),btn=document.getElementById('start-btn');
+  if(!sel.length){ql.innerHTML='<div class="empty-q">Tap movements above to add them to your queue</div>';btn.disabled=true;return;}
+  btn.disabled=false;ql.innerHTML='';
+  sel.forEach((mi,pos)=>{
+    const r=document.createElement('div');r.className='q-row';
+    r.innerHTML=`<div class="q-icon">${MOVES[mi].i}</div><div class="q-name">${MOVES[mi].n}</div><div class="q-dur">${curDurSec}s</div><button class="q-rm" onclick="rmQ(${pos})">✕</button>`;
+    ql.appendChild(r);
+  });
+}
+function rmQ(pos){sel.splice(pos,1);rfGrid();rfQ();}
+function clearAll(){sel=[];rfGrid();rfQ();}
+function toggleRand(){randOpen=!randOpen;document.getElementById('rand-panel').classList.toggle('hidden',!randOpen);}
+function updRandLbl(){randN=parseInt(document.getElementById('rand-sl').value);document.getElementById('rand-lbl').textContent=randN;}
+function doRand(){
+  const sh=[...Array(MOVES.length).keys()].sort(()=>Math.random()-.5);
+  sel=sh.slice(0,randN);rfGrid();rfQ();randOpen=false;document.getElementById('rand-panel').classList.add('hidden');
+}
+let curDurSec=90;
+function setDur(sec,btn){
+  curDurSec=sec;
+  document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  rfQ();
+}
+function updBDur(){bdurM=parseInt(document.getElementById('bdur-sl').value);document.getElementById('bdur-lbl').textContent=bdurM+' min';}
+function switchTab(t){
+  document.getElementById('tc-m').classList.toggle('hidden',t!=='m');
+  document.getElementById('tc-b').classList.toggle('hidden',t!=='b');
+  document.getElementById('tab-m').classList.toggle('active',t==='m');
+  document.getElementById('tab-b').classList.toggle('active',t!=='m');
+}
+function selB(i){
+  bpI=i;for(let j=0;j<4;j++)document.getElementById('bopt'+j).classList.toggle('sel',j===i);
+  const p=BPRE[i];D.in=p.in;D.h1=p.h1;D.h1on=p.h1on;D.ex=p.ex;D.h2=p.h2;D.h2on=p.h2on;
+  rfDials();
+}
+function adj(k,d){D[k]=Math.max(1,Math.min(20,D[k]+d));rfDials();}
+function togPhase(k){D[k+'on']=!D[k+'on'];rfDials();}
+function calcBreathStats(){
+  // cycle length = inhale + (hold1 if on) + exhale + (hold2 if on)
+  const cycle=D.in+(D.h1on?D.h1:0)+D.ex+(D.h2on?D.h2:0);
+  const bpm=(60/cycle).toFixed(1);
+  const pct=Math.round((1-(60/cycle)/17)*100);
+  const redStr=pct+'%';
+  ['bpm-setup','bpm-sess','bpm-live'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=bpm;});
+  ['red-setup','red-sess','red-live'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=redStr;});
+}
+function rfDials(){
+  ['in','h1','ex','h2'].forEach(k=>document.getElementById('dv-'+k).textContent=D[k]);
+  ['h1','h2'].forEach(k=>{
+    const on=D[k+'on'];
+    document.getElementById('lbl-'+k).classList.toggle('dim',!on);
+    document.getElementById('dv-'+k).classList.toggle('dim',!on);
+    document.getElementById('dbm-'+k).disabled=!on;
+    document.getElementById('dbp-'+k).disabled=!on;
+    document.getElementById('tog-'+k).textContent=on?'disable':'enable';
+  });
+  const pts=[];
+  pts.push(D.in+'s in');
+  if(D.h1on)pts.push(D.h1+'s hold');
+  pts.push(D.ex+'s out');
+  if(D.h2on)pts.push(D.h2+'s hold');
+  document.getElementById('pat-sum').textContent='Pattern: '+pts.join(' · ');
+  calcBreathStats();
+}
+function buildAPat(){
+  const s=[];
+  s.push({p:'inhale',t:D.in});
+  if(D.h1on)s.push({p:'hold',t:D.h1});
+  s.push({p:'exhale',t:D.ex});
+  if(D.h2on)s.push({p:'hold',t:D.h2});
+  return s;
+}
+
+// ── AUDIO ──────────────────────────────────────────────────────────────
+// All frequencies per spec: Inhale=528Hz, Hold-in=440Hz, Exhale=396Hz, Hold-out=330Hz
+// ── AUDIO ── matched to iheh_enhanced_8 ──────────────────────────────────
+let _actx = null;
+let soundOn = true;
+
+function ensureAudio() {
+  if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_actx.state === 'suspended') _actx.resume();
+  return _actx;
+}
+
+function sineTone(freq, dur, vol, delay) {
+  vol = vol || 1.0; delay = delay || 0;
+  if (!soundOn) return;
+  try {
+    const ctx = ensureAudio();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.value = freq;
+    const t = ctx.currentTime + delay;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(vol * 0.14, t + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.start(t); o.stop(t + dur + 0.01);
+  } catch(e) {}
+}
+
+function tone(freq, dur, vol, delay) {
+  sineTone(freq, dur || 0.5, vol || 1.0, delay || 0);
+}
+
+// Movement start — warm rising chime (C5 → E5)
+function toneS() {
+  tone(523.25, 0.55); tone(659.25, 0.6, 1.0, 0.24);
+}
+
+// Between exercises — gentle three-note resolution
+function toneD() {
+  tone(659.25, 0.35); tone(523.25, 0.35, 1.0, 0.30); tone(392, 0.5, 1.0, 0.56);
+}
+
+// All movements done — iheh celebration: 396→440→528→660
+function toneCelebrate() {
+  tone(396, 0.55, 0.9, 0.0);
+  tone(440, 0.55, 0.9, 0.2);
+  tone(528, 0.65, 1.0, 0.4);
+  tone(660, 1.1,  0.9, 0.6);
+}
+
+// Breathwork session open
+function toneBreathStart() {
+  tone(396, 0.55, 0.9, 0.0);
+  tone(440, 0.55, 0.9, 0.2);
+  tone(528, 0.65, 1.0, 0.4);
+}
+
+// BREATH PHASE TONES — exactly as iheh
+const TONES = {
+  inhale: () => tone(528, 0.5,  1.0),
+  hold1:  () => tone(440, 0.4,  0.75),
+  exhale: () => tone(396, 0.6,  1.0),
+  hold2:  () => tone(330, 0.4,  0.75),
+};
+
+function toneInhale()  { TONES.inhale(); }
+function toneHold1()   { TONES.hold1(); }
+function toneExhale()  { TONES.exhale(); }
+function toneHold2()   { TONES.hold2(); }
+
+// Breathwork complete — same as iheh celebration
+function toneBreathDone() {
+  tone(396, 0.55, 0.9, 0.0);
+  tone(440, 0.55, 0.9, 0.2);
+  tone(528, 0.65, 1.0, 0.4);
+  tone(660, 1.1,  0.9, 0.6);
+}
+
+// Countdown tones — iheh frequencies
+const COUNTDOWN_FREQS = { 5: 493.88, 4: 466.16, 3: 440.00, 2: 415.30, 1: 392.00 };
+function toneCountdown(secsLeft) {
+  sineTone(COUNTDOWN_FREQS[secsLeft] || 440, 0.35, 0.85);
+}
+
+// iOS keep-alive silent audio
+let silentNode = null;
+function startSilentAudio() {
+  if (silentNode) return;
+  try {
+    const ctx = ensureAudio();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = 1; gain.gain.value = 0.0001;
+    osc.start(); silentNode = { osc, gain };
+  } catch(e) {}
+}
+
+function breathPhaseTone(phase, phaseIdx) {
+  if (phase === 'inhale') toneInhale();
+  else if (phase === 'exhale') toneExhale();
+  else {
+    if (phaseIdx !== undefined && apat && apat[phaseIdx-1] && apat[phaseIdx-1].p === 'exhale') toneHold2();
+    else toneHold1();
+  }
+}
+// ── END AUDIO ───────────────────────────────────────────────────────────
+
+// MOVEMENT SESSION
+function startSess(){
+  queue=sel.map(i=>({...MOVES[i],dur:curDurSec}));
+  sessI=0;show('s-sess');dot(1);runMov();
+}
+function runMov(){
+  if(sessI>=queue.length){toneCelebrate();setTimeout(goBreath,1800);return;}
+  const m=queue[sessI];sleft=m.dur;spause=false;
+  document.getElementById('sp-lbl').textContent='Movement '+(sessI+1)+' of '+queue.length;
+  document.getElementById('si').textContent=m.i;
+  document.getElementById('sn').textContent=m.n;
+  document.getElementById('sd').textContent=curDurSec+'s';
+  document.getElementById('sess-tip').textContent=m.tip;
+  document.getElementById('s-cd').textContent=sleft;
+  document.getElementById('s-prog').style.width='0%';
+  document.getElementById('s-ring').style.strokeDashoffset='376.99';
+  const nx=queue[sessI+1];
+  document.getElementById('s-next').textContent=nx?'Next: '+nx.n:'Last one!';
+  document.getElementById('pause-btn').textContent='Pause';
+  toneS();
+  if(stimer)clearInterval(stimer);
+  stimer=setInterval(()=>{
+    if(spause)return;sleft--;
+    const pct=(m.dur-sleft)/m.dur;
+    document.getElementById('s-ring').style.strokeDashoffset=376.99-pct*376.99;
+    document.getElementById('s-prog').style.width=(pct*100)+'%';
+    document.getElementById('s-cd').textContent=sleft;
+    if(sleft<=0){
+      clearInterval(stimer);
+      const isLast=sessI===queue.length-1;
+      if(isLast){toneD();}else{toneD();}
+      sessI++;
+      setTimeout(runMov,900);
+    }
+  },1000);
+}
+function togPause(){spause=!spause;document.getElementById('pause-btn').textContent=spause?'Resume':'Pause';}
+function skipMov(){clearInterval(stimer);sessI++;setTimeout(runMov,200);}
+
+// BREATH
+let bSettingsOpen=true;
+function togBreathSettings(){
+  bSettingsOpen=!bSettingsOpen;
+  document.getElementById('breath-settings-panel').classList.toggle('hidden',!bSettingsOpen);
+  document.getElementById('breath-settings-arrow').style.transform=bSettingsOpen?'rotate(180deg)':'';
+}
+function selB2(i){
+  bpI=i;
+  for(let j=0;j<4;j++){
+    document.getElementById('bopt'+j).classList.toggle('sel',j===i);
+    document.getElementById('bopt2-'+j).classList.toggle('sel',j===i);
+  }
+  const p=BPRE[i];D.in=p.in;D.h1=p.h1;D.h1on=p.h1on;D.ex=p.ex;D.h2=p.h2;D.h2on=p.h2on;
+  rfDials();rfDials2();updateBreathPreview();
+}
+function adj2(k,d){D[k]=Math.max(1,Math.min(20,D[k]+d));rfDials();rfDials2();updateBreathPreview();}
+function togPhase2(k){
+  D[k+'on']=!D[k+'on'];
+  rfDials();rfDials2();updateBreathPreview();
+}
+function rfDials2(){
+  ['in','h1','ex','h2'].forEach(k=>document.getElementById('dv2-'+k).textContent=D[k]);
+  ['h1','h2'].forEach(k=>{
+    const on=D[k+'on'];
+    document.getElementById('lbl2-'+k).classList.toggle('dim',!on);
+    document.getElementById('dv2-'+k).classList.toggle('dim',!on);
+    document.getElementById('db2m-'+k).disabled=!on;
+    document.getElementById('db2p-'+k).disabled=!on;
+    document.getElementById('tog2-'+k).textContent=on?'disable':'enable';
+  });
+  const pts=[];
+  pts.push(D.in+'s in');if(D.h1on)pts.push(D.h1+'s hold');
+  pts.push(D.ex+'s out');if(D.h2on)pts.push(D.h2+'s hold');
+  document.getElementById('pat-sum2').textContent='Pattern: '+pts.join(' · ');
+  calcBreathStats();
+}
+function updBDur2(){bdurM=parseInt(document.getElementById('bdur2-sl').value);document.getElementById('bdur2-lbl').textContent=bdurM+' min';document.getElementById('bdur-sl').value=bdurM;document.getElementById('bdur-lbl').textContent=bdurM+' min';}
+function updateBreathPreview(){
+  apat=buildAPat();
+  const pts=apat.map(s=>s.t+'s '+s.p);
+  document.getElementById('b-desc').textContent=pts.join(' · ');
+}
+function goBreath(){
+  show('s-breath');dot(2);apat=buildAPat();
+  const pts=apat.map(s=>s.t+'s '+s.p);
+  document.getElementById('b-name').textContent='Breathwork';
+  document.getElementById('b-desc').textContent=pts.join(' · ');
+  // sync secondary dials to match current D state
+  rfDials2();
+  // sync session length slider
+  document.getElementById('bdur2-sl').value=bdurM;
+  document.getElementById('bdur2-lbl').textContent=bdurM+' min';
+  // sync presets
+  for(let j=0;j<4;j++)document.getElementById('bopt2-'+j).classList.toggle('sel',j===bpI);
+}
+function beginBreath(){
+  apat=buildAPat();
+  btotal=bdurM*60;belap=0;bphI=0;bphL=apat[0].t;bpause=false;
+  // close settings panel
+  bSettingsOpen=false;
+  document.getElementById('breath-settings-panel').classList.add('hidden');
+  document.getElementById('breath-settings-arrow').style.transform='';
+  document.getElementById('b-pre').classList.add('hidden');
+  document.getElementById('b-run').classList.remove('hidden');
+  toneBreathStart();
+  setTimeout(()=>breathPhaseTone(apat[0].p,0),600);
+  newBreathMantra();
+  updBUI();bint=setInterval(btick,1000);
+}
+function btick(){
+  if(bpause)return;belap++;bphL--;
+  if(bphL<=0){
+    bphI=(bphI+1)%apat.length;bphL=apat[bphI].t;
+    breathPhaseTone(apat[bphI].p,bphI);
+  }
+  updBUI();
+  if(belap>=btotal){clearInterval(bint);toneBreathDone();setTimeout(goMantra,2200);}
+}
+function updBUI(){
+  const st=apat[bphI],rem=btotal-belap,m=Math.floor(rem/60),s=rem%60;
+  document.getElementById('bc-n').textContent=bphL;
+  document.getElementById('bc-p').textContent=st.p;
+  document.getElementById('bc-r').textContent=m+':'+(s<10?'0':'')+s+' remaining';
+  document.getElementById('bc-prog').style.width=(belap/btotal*100)+'%';
+  const bc=document.getElementById('bc');
+  if(st.p==='inhale'){bc.style.transform='scale(1.15)';bc.style.borderColor='rgba(var(--teal-rgb),0.7)';}
+  else if(st.p==='exhale'){bc.style.transform='scale(0.88)';bc.style.borderColor='rgba(var(--teal-rgb),0.45)';}
+  else{bc.style.transform='scale(1)';bc.style.borderColor='rgba(var(--teal-rgb),0.25)';}
+  bc.style.transition='transform '+st.t+'s ease-in-out,border-color .5s';
+}
+function togBreath(){bpause=!bpause;document.getElementById('bpause-btn').textContent=bpause?'Resume':'Pause';}
+function endBreath(){clearInterval(bint);goMantra();}
+function goMantra(){show('s-mantra');dot(3);newMantra();}
+function finish(){show('s-done');document.querySelectorAll('.phase-dot').forEach(d=>{d.classList.remove('active');d.classList.add('done');});}
+function goStart(){show('s-setup');for(let i=0;i<4;i++){const d=document.getElementById('dot'+i);d.classList.remove('active','done');}document.getElementById('dot0').classList.add('active');}
+function show(id){['s-setup','s-sess','s-breath','s-mantra','s-done'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
+function dot(n){for(let i=0;i<4;i++){const d=document.getElementById('dot'+i);d.classList.remove('active','done');if(i<n)d.classList.add('done');else if(i===n)d.classList.add('active');}}
+
+const MANTRAS=[
+  "I am open to the possibilities this day holds.",
+  "I move through this day with ease and intention.",
+  "My body is awake, my mind is clear, my heart is ready.",
+  "I choose how I show up today.",
+  "Each breath is a fresh beginning.",
+  "I am enough, exactly as I am right now.",
+  "Today I act from my deepest values.",
+  "I welcome challenges as invitations to grow.",
+  "My presence is my greatest gift today.",
+  "I release what I cannot control and focus on what I can.",
+  "I am grounded, I am centred, I am here.",
+  "Today I create rather than react.",
+  "The energy I bring shapes everything around me.",
+  "I trust my instincts and move forward with courage.",
+  "I am grateful for this body and this moment.",
+  "Every small action I take today matters.",
+  "I bring my whole self to whatever this day asks of me.",
+  "I am the author of my own story.",
+  "Today I choose curiosity over fear.",
+  "My calm is contagious — I spread it freely.",
+];
+
+const TAROT=[
+  {n:'The Fool',a:'Major Arcana',sym:'🌄',meaning:'A spirit of pure potential and new beginnings. You stand at the edge of an adventure, unburdened by what came before.',q:'What would you do today if you weren\'t afraid of looking foolish?'},
+  {n:'The Magician',a:'Major Arcana',sym:'⚗️',meaning:'You have every tool you need. This card is about focused will — the power to take what\'s in front of you and make something real.',q:'What skill or resource are you underusing right now?'},
+  {n:'The High Priestess',a:'Major Arcana',sym:'🌙',meaning:'Something is known beneath the surface. Trust the quiet voice, the hunch, the thing you feel but haven\'t yet said aloud.',q:'What does your intuition already know that your mind keeps second-guessing?'},
+  {n:'The Empress',a:'Major Arcana',sym:'🌸',meaning:'Creativity, abundance, and nurturing energy. A reminder to tend to what you love — including yourself.',q:'Where in your life is something ready to bloom if you give it a little more care?'},
+  {n:'The Emperor',a:'Major Arcana',sym:'🏔️',meaning:'Structure, stability, and responsible action. A day to build something solid rather than leaving things to chance.',q:'Where do you need to take firmer ownership today?'},
+  {n:'The Hierophant',a:'Major Arcana',sym:'🔑',meaning:'Tradition, wisdom, and the value of learned knowledge. Consider the guidance already available to you.',q:'Whose wisdom could you draw on today instead of figuring it out alone?'},
+  {n:'The Lovers',a:'Major Arcana',sym:'💞',meaning:'A significant choice stands before you. This card asks for alignment — head, heart, and values, together.',q:'What decision are you avoiding that you actually already know the answer to?'},
+  {n:'The Chariot',a:'Major Arcana',sym:'🏆',meaning:'Determination, momentum, and victory through willpower. You can move through resistance today.',q:'What would you pursue today if you knew you had the strength to see it through?'},
+  {n:'Strength',a:'Major Arcana',sym:'🦁',meaning:'Quiet courage, patience, and inner fortitude. The greatest strength is often the gentlest.',q:'Where might a softer approach actually be the more powerful one today?'},
+  {n:'The Hermit',a:'Major Arcana',sym:'🔦',meaning:'Solitude, introspection, and inner light. A day to look inward rather than outward for your answers.',q:'What truth have you been too busy to sit with?'},
+  {n:'Wheel of Fortune',a:'Major Arcana',sym:'🎡',meaning:'Cycles, change, and the turning of fate. Whatever phase you\'re in — expansion or contraction — it will shift.',q:'What cycle in your life might be completing right now?'},
+  {n:'Justice',a:'Major Arcana',sym:'⚖️',meaning:'Clarity, cause and effect, and honest reckoning. Things are balancing out as they should.',q:'Where do you need to be more honest with yourself about a situation?'},
+  {n:'The Hanged Man',a:'Major Arcana',sym:'🌀',meaning:'Suspension, surrender, and a different perspective. What looks like a delay may be a gift.',q:'What would change if you stopped trying to force this and simply let it be for now?'},
+  {n:'Death',a:'Major Arcana',sym:'🍂',meaning:'Endings that make way for beginnings. Something is completing — and that\'s not a loss, it\'s a transformation.',q:'What are you holding onto that it\'s time to release?'},
+  {n:'Temperance',a:'Major Arcana',sym:'🌊',meaning:'Balance, patience, and the art of integration. Not too much, not too little — steady, measured flow.',q:'Where are you out of balance, and what would bring you back to centre?'},
+  {n:'The Devil',a:'Major Arcana',sym:'⛓️',meaning:'Patterns, attachments, and the places we feel stuck. The chains in this card are often loosely worn — we can walk away.',q:'What habit, story, or situation has more power over you than it should?'},
+  {n:'The Tower',a:'Major Arcana',sym:'⚡',meaning:'Sudden revelation, disruption, and breakthrough. What looks like destruction is often radical clarity.',q:'What illusion or structure in your life needs to come down so something real can grow?'},
+  {n:'The Star',a:'Major Arcana',sym:'⭐',meaning:'Hope, renewal, and trust after difficulty. A quiet reminder that healing is happening even when you can\'t see it.',q:'What are you still hoping for that you\'ve been afraid to admit?'},
+  {n:'The Moon',a:'Major Arcana',sym:'🌕',meaning:'Illusion, the unconscious, and things not yet clear. Not everything can be known right now — navigate by feel.',q:'What fear or dream has been surfacing that you haven\'t fully looked at?'},
+  {n:'The Sun',a:'Major Arcana',sym:'☀️',meaning:'Joy, vitality, and radiant clarity. A genuinely good card — permission to feel good, to shine without apology.',q:'What would you do today if you gave yourself full permission to enjoy it?'},
+  {n:'Judgement',a:'Major Arcana',sym:'🔔',meaning:'A call to rise, to answer, to step into a new version of yourself. Something is being completed and assessed.',q:'What version of yourself is ready to emerge if you\'d let it?'},
+  {n:'The World',a:'Major Arcana',sym:'🌍',meaning:'Completion, integration, and wholeness. A cycle has come full circle. You\'ve earned this moment.',q:'What have you accomplished that you haven\'t properly celebrated or acknowledged?'},
+  {n:'Ace of Cups',a:'Minor Arcana · Cups',sym:'💧',meaning:'A fresh emotional beginning — an outpouring of feeling, love, or creative inspiration ready to flow.',q:'What are you ready to open your heart to?'},
+  {n:'Ace of Wands',a:'Minor Arcana · Wands',sym:'🔥',meaning:'A spark of inspiration or passion. Something new wants to be initiated — and the energy is there to begin.',q:'What idea or project is quietly asking for your attention?'},
+  {n:'Ace of Swords',a:'Minor Arcana · Swords',sym:'🗡️',meaning:'Mental clarity, truth, and a decisive new thought. Cut through confusion today — the answer is sharper than you think.',q:'What truth are you ready to face or speak?'},
+  {n:'Ace of Pentacles',a:'Minor Arcana · Pentacles',sym:'🌿',meaning:'A new opportunity in the material world — work, health, finances, or a practical project ready to take root.',q:'What practical thing could you begin today that would matter in six months?'},
+  {n:'Three of Cups',a:'Minor Arcana · Cups',sym:'🥂',meaning:'Celebration, friendship, and the joy of connection. A reminder that life is richer when it\'s shared.',q:'Who deserves your time and attention today?'},
+  {n:'Six of Swords',a:'Minor Arcana · Swords',sym:'🚣',meaning:'Moving away from turbulence toward calmer waters. Transition is underway, even if it\'s quiet.',q:'What are you slowly moving away from — and is that the right direction?'},
+  {n:'Ten of Pentacles',a:'Minor Arcana · Pentacles',sym:'🏡',meaning:'Legacy, long-term security, and the satisfaction of what has been built. Look at what\'s already here.',q:'What in your life represents real, lasting wealth — not just the financial kind?'},
+  {n:'Page of Cups',a:'Minor Arcana · Cups',sym:'🐟',meaning:'Curiosity, sensitivity, and messages from the heart. A playful, open energy — let something surprise you today.',q:'What would you create or express if you didn\'t need it to be serious?'},
+  {n:'Knight of Wands',a:'Minor Arcana · Wands',sym:'🏇',meaning:'Bold action, passion, and momentum. A day to move fast and trust the fire in you.',q:'What are you waiting for permission to pursue?'},
+  {n:'Queen of Cups',a:'Minor Arcana · Cups',sym:'🌺',meaning:'Emotional intelligence, compassion, and deep intuition. Lead from the heart today.',q:'Who in your life needs your empathy right now — including yourself?'},
+  {n:'King of Pentacles',a:'Minor Arcana · Pentacles',sym:'🌳',meaning:'Mastery, abundance, and reliable strength. A day to be the steady, grounded presence others can rely on.',q:'Where can you bring your steadiest, most capable self today?'},
+];
+
+const BREATH_MANTRAS=[
+  "With each breath, I return to myself.",
+  "I breathe in calm. I breathe out tension.",
+  "My breath is the anchor that holds me in the present.",
+  "Slow breath, slow mind, slow life.",
+  "Every exhale is a release. Every inhale is a new beginning.",
+  "I am as steady as my breath.",
+  "In the rhythm of my breath, I find my centre.",
+  "The breath knows the way. I just follow.",
+  "Nothing needs solving right now. Just this breath.",
+  "I breathe in possibility. I breathe out what no longer serves.",
+  "My nervous system is calming with every cycle.",
+  "This breath is enough. This moment is enough.",
+  "I am slowing down the world, one breath at a time.",
+  "The quieter I become, the more I can hear.",
+  "My breath is always here. And so am I.",
+  "In. Pause. Out. This is the whole practice.",
+  "Breathing is the most natural form of letting go.",
+  "I trust the rhythm. I trust myself.",
+  "With every breath, I grow a little calmer.",
+  "My body knows how to heal. I just need to breathe.",
+];
+
+let lastBMIdx=-1;
+function newBreathMantra(){
+  let i;do{i=Math.floor(Math.random()*BREATH_MANTRAS.length);}while(i===lastBMIdx&&BREATH_MANTRAS.length>1);
+  lastBMIdx=i;
+  const el=document.getElementById('breath-mantra-text');
+  if(el)el.textContent='\u201C'+BREATH_MANTRAS[i]+'\u201D';
+}
+
+function sendTestimonial(){
+  const name=document.getElementById('test-name').value.trim();
+  const msg=document.getElementById('test-msg').value.trim();
+  if(!msg){document.getElementById('test-msg').style.borderColor='#c0392b';return;}
+  const subject=encodeURIComponent('Breathwork Mike — Testimonial'+(name?' from '+name:''));
+  const body=encodeURIComponent((name?'From: '+name+'\n\n':'')+msg);
+  window.location.href='mailto:breathworkmike@gmail.com?subject='+subject+'&body='+body;
+  // hide form fields, show thank you
+  document.getElementById('test-name').closest('div[style*="border-top"]').style.display='none';
+  document.getElementById('test-sent').classList.remove('hidden');
+}
+function sendFeedback(){
+  const name=document.getElementById('fb-name').value.trim();
+  const msg=document.getElementById('fb-msg').value.trim();
+  if(!msg){document.getElementById('fb-msg').style.borderColor='#c0392b';return;}
+  const subject=encodeURIComponent('Daily Practice App Feedback'+(name?' from '+name:''));
+  const body=encodeURIComponent((name?'From: '+name+'\n\n':'')+msg);
+  window.location.href='mailto:breathworkmike@gmail.com?subject='+subject+'&body='+body;
+  document.getElementById('feedback-form').classList.add('hidden');
+  document.getElementById('feedback-sent').classList.remove('hidden');
+}
+
+let lastMantraIdx=-1;
+function newMantra(){
+  let i;do{i=Math.floor(Math.random()*MANTRAS.length);}while(i===lastMantraIdx&&MANTRAS.length>1);
+  lastMantraIdx=i;
+  document.getElementById('mantra-text').textContent='\u201C'+MANTRAS[i]+'\u201D';
+}
+function drawTarot(){
+  const card=TAROT[Math.floor(Math.random()*TAROT.length)];
+  document.getElementById('tarot-idle').classList.add('hidden');
+  document.getElementById('tarot-result').classList.remove('hidden');
+  document.getElementById('tarot-symbol').textContent=card.sym;
+  document.getElementById('tarot-name').textContent=card.n;
+  document.getElementById('tarot-arcana').textContent=card.a;
+  document.getElementById('tarot-meaning').textContent=card.meaning;
+  document.getElementById('tarot-question').textContent='Reflect: '+card.q;
+}
+
+// ── NAVIGATION ──
+function goMantra(){show('s-mantra');dot(3);newMantra();}
+function finish(){show('s-done');document.querySelectorAll('.phase-dot').forEach(d=>{d.classList.remove('active');d.classList.add('done');});}
+function goStart(){
+  show('s-setup');
+  for(let i=0;i<4;i++){const d=document.getElementById('dot'+i);d.classList.remove('active','done');}
+  document.getElementById('dot0').classList.add('active');
+}
+function show(id){['s-setup','s-sess','s-breath','s-mantra','s-done'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
+function dot(n){for(let i=0;i<4;i++){const d=document.getElementById('dot'+i);d.classList.remove('active','done');if(i<n)d.classList.add('done');else if(i===n)d.classList.add('active');}}
+
+function sendTestimonial(){
+  const name=document.getElementById('test-name').value.trim();
+  const msg=document.getElementById('test-msg').value.trim();
+  if(!msg){document.getElementById('test-msg').style.borderColor='#c0392b';return;}
+  const subject=encodeURIComponent('Breathwork Mike \u2014 Testimonial'+(name?' from '+name:''));
+  const body=encodeURIComponent((name?'From: '+name+'\n\n':'')+msg);
+  window.location.href='mailto:breathworkmike@gmail.com?subject='+subject+'&body='+body;
+  document.getElementById('test-form').style.display='none';
+  document.getElementById('test-sent').classList.remove('hidden');
+}
+function sendFeedback(){
+  const name=document.getElementById('fb-name').value.trim();
+  const msg=document.getElementById('fb-msg').value.trim();
+  if(!msg){document.getElementById('fb-msg').style.borderColor='#c0392b';return;}
+  const subject=encodeURIComponent('Daily Practice App Feedback'+(name?' from '+name:''));
+  const body=encodeURIComponent((name?'From: '+name+'\n\n':'')+msg);
+  window.location.href='mailto:breathworkmike@gmail.com?subject='+subject+'&body='+body;
+  document.getElementById('feedback-form').classList.add('hidden');
+  document.getElementById('feedback-sent').classList.remove('hidden');
+}
+
+function toggleTheme(){
+  const body=document.body;
+  const btn=document.getElementById('theme-btn');
+  if(body.classList.contains('theme-pink')){
+    body.classList.remove('theme-pink');
+    btn.textContent='🌿';
+    localStorage.setItem('dpTheme','green');
+  } else {
+    body.classList.add('theme-pink');
+    btn.textContent='🌸';
+    localStorage.setItem('dpTheme','pink');
+  }
+}
+// Restore saved theme
+(function(){if(localStorage.getItem('dpTheme')==='pink'){document.body.classList.add('theme-pink');document.getElementById('theme-btn').textContent='🌸';}})();
+
+buildGrid();
+rfQ();
+rfDials();
+rfDials2();
+calcBreathStats();
+</script>
+</body>
+</html>
